@@ -5,7 +5,7 @@ from flask import Flask, redirect, render_template, url_for, request, g, session
 # from flask_socketio import SocketIO, emit
 from functools import wraps
 from flask_session import Session
-
+from models import *
 
 app = Flask(__name__)
 app.config["SECRET_KEY"] = os.getenv("SECRET_KEY")
@@ -20,8 +20,7 @@ def display_name_required(f):
 	@wraps(f)
 	def decorated_function(*args, **kwargs):
 		if not session.get("user"):
-			print(session.get("user"), file=sys.stderr)
-			return redirect(url_for("display_name"))
+			return redirect(url_for("login"))
 		#g.user = session.get("user")
 		return f(*args, **kwargs)
 	return decorated_function
@@ -31,8 +30,8 @@ def display_name_required(f):
 def index():
 	return render_template("flack.html")
 
-@app.route("/display-name", methods = ['POST', 'GET'])
-def display_name():
+@app.route("/login", methods = ['POST', 'GET'])
+def login():
 	if session.get("user"):
 		return redirect(url_for("index"))
 
@@ -41,9 +40,7 @@ def display_name():
 			error = "Display Name is required my friend!"
 			return render_template("name.html", error)
 
-		print(request.form.get("display-name"), file=sys.stderr)
 		session["user"] = request.form.get("display-name")
-		print(session["user"], file=sys.stderr)
 		return redirect(url_for("index"))
 
 	return render_template("name.html")
@@ -51,4 +48,12 @@ def display_name():
 @app.route('/clear-name', methods= ['POST', 'GET'])
 def clear_name():
 	session.clear()
-	return redirect(url_for('display_name'))
+	return redirect(url_for('login'))
+
+
+@app.route('/add-channel', methods=['POST'])
+def add_channel():
+	#TODO form error handling- empty value, same name, lenght up to 60characters??, escape special characters
+	#TODO creating the channel
+	#TODO preparing the response
+	return jsonify(this)

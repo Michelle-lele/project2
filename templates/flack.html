@@ -4,37 +4,30 @@
 	<div class="container-fluid col-md-3 col-12" id="sidebar"> 
 		<div>
 			<img class="" id="logo-small" src="../static/media/logo-sm.jpg" alt="FLACK- a cs50w project">
-			<h3 class="">{{ session.get("user") }}</h3>
-			<form method="POST" action="/clear-name">
-				<button type="submit" class="icon"><i class="fas fa-user-edit"></i></button>
-			</form>
 		</div>
 		<div id="channels">
 			<h3>Channels</h3>
-			<form>
+			<form id="add-channel">
 				<button type="submit" class="icon" formaction=""><i class="fas fa-plus"></i></button>
 			</form>
 			<div id="channels-list">
-				<table class="table table-hover">
+				<table id="channels-table" class="table table-hover">
 				  <thead>
+				  	 <th>Add the first channel!</th>
 				  </thead>
 				  <tbody>
-				    <tr>
-				      <td>My chat</td>
-				    </tr>
-				    <tr>
-				      <td>Your chat</td>
-				    </tr>
-				    <tr>
-				      <td>Traveling</td>
-				    </tr>
 				  </tbody>
 				</table>
 			</div>
 		</div>
 	</div>
 	<div class="container-fluid col-md-9 col-12">
-		<h1>Hello, world!</h1>
+		<div>
+			<h2 class="">{{ session.get("user") }}</h2>
+			<form method="POST" action="/clear-name">
+				<button type="submit" class="icon"><i class="fas fa-user-edit"></i></button>
+			</form>
+		</div>
 	</div>
 </body>	
 {% endblock %}
