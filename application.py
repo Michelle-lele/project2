@@ -1,7 +1,7 @@
 import os
 import sys
 
-from flask import Flask, redirect, render_template, url_for, request, g, session
+from flask import Flask, redirect, render_template, url_for, request, g, session, jsonify
 # from flask_socketio import SocketIO, emit
 from functools import wraps
 from flask_session import Session
@@ -56,4 +56,4 @@ def add_channel():
 	#TODO form error handling- empty value, same name, lenght up to 60characters??, escape special characters
 	#TODO creating the channel
 	#TODO preparing the response
-	return jsonify(this)
+	return redirect(url_for('index'))

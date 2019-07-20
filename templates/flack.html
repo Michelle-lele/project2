@@ -1,4 +1,10 @@
 {% extends "index.html" %}
+
+{% block head %}
+<!-- JavaScript -->
+	<script type="text/javascript" src="../static/script.js"></script>
+{% endblock %}
+
 {% block body %}
 <body data-gr-c-s-loaded="true">
 	<div class="container-fluid col-md-3 col-12" id="sidebar"> 
@@ -8,12 +14,12 @@
 		<div id="channels">
 			<h3>Channels</h3>
 			<form id="add-channel">
-				<button type="submit" class="icon" formaction=""><i class="fas fa-plus"></i></button>
+				<button id="new-channel" class="icon"><i class="fas fa-plus"></i></button>
 			</form>
 			<div id="channels-list">
+				<span>Add the first channel!</span>
 				<table id="channels-table" class="table table-hover">
 				  <thead>
-				  	 <th>Add the first channel!</th>
 				  </thead>
 				  <tbody>
 				  </tbody>

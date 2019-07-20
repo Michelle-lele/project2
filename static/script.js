@@ -1,7 +1,10 @@
 document.addEventListener('DOMContentLoaded', () =>{
-	document.querySelector("#add-channel").onsubmit = () =>{
-		document.querySelector("#add-channel").innerHTML = '<input id="channel-name" type="text" required autofocus><button type="submit" class="icon" formaction="/add-channel"><i class="fas fa-save"></i></button>';
-		/*to fix the issue with 2 onsubmit bug*/
+	document.querySelector("#new-channel").onclick = () =>{
+		var form = document.getElementById('add-channel');
+		var new_channel_button = '<button id="new-channel" class="icon"><i class="fas fa-plus"></i></button>';
+		var add_channel = '<input id="channel-name" type="text" required autofocus><button type="submit" id="save" class="icon"><i class="fas fa-save"></i></button>';
+		form.innerHTML = add_channel;
+		
 		document.querySelector("#add-channel").onsubmit = () =>{
 			/*
 			const request = new XMLHttpRequest();
@@ -18,11 +21,12 @@ document.addEventListener('DOMContentLoaded', () =>{
 			var td = tr.insertCell(0);
 			td.innerHTML = document.querySelector("#channel-name").value;
 			document.querySelector("#channel-name").value = '';
-			document.querySelector("#add-channel").innerHTML = '<button type="submit" class="icon" formaction=""><i class="fas fa-plus"></i></button>'
+			form.innerHTML = new_channel_button;
 		
 			return false;
 		};
 		return false;
 	};
+	return false;
 
 });
