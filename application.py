@@ -55,10 +55,18 @@ def clear_name():
 
 @app.route('/add-channel', methods=['POST'])
 def add_channel():
-	#TODO form error handling- empty value, same name, lenght up to 60characters??, escape special characters
-	#TODO creating the channel
-	channelName = "This name"
+	error = ""
+	#TODO form error handling- empty value, lenght up to 60characters??, escape special characters
+	channelName = request.form.get("name")
+
+	#ensure channel name doesn't exist
+	for channel in channels:
+		if channelName == channel.name:
+			error = "Wooops channel exists! ;)"
+			return jsonify({"error": error})
+
 	newChannel = Channel(channelName)
 	channels.append(newChannel)
+
 	#TODO preparing the response
-	return redirect(url_for('index'))
+	return jsonify(channelName)

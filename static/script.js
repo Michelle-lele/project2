@@ -4,24 +4,37 @@ document.addEventListener('DOMContentLoaded', () => {
 
   	newChannelBtn.addEventListener('click', () => {
 	form.style.display = 'block';
-  });
+  	});
 
     form.addEventListener('submit', () => {
-	    /*
+    	var newChannel = document.querySelector('#channelName').value;
+
 	    const request = new XMLHttpRequest();
+
 	    request.open('POST', '/add-channel');
 
-	    request.onload () =>{
+	    request.onload = () =>{
+	    	console.log(request.responseText);
+	    	const data = JSON.parse(request.responseText);
+	    	console.log(data.success);
+	    	//fix the condition, returns undefined
+		    	if (data.success) {
+		    		var myTable = document.querySelector('#channelsTable');
+	    			var tr = myTable.insertRow(0);
+	    			var td = tr.insertCell(0);
+	    			td.innerHTML = newChannel;
+		    	}
+		    	else {
+		    		console.log('Woops!');
+		    	}
+	    }
 
-	    };
-	    request.send();
-	    */
-	    var myTable = document.querySelector('#channelsTable');
-	    var tr = myTable.insertRow(0);
-	    var td = tr.insertCell(0);
-	    td.innerHTML = document.querySelector('#channelName').value;
+	    const data = new FormData();
+		data.append('name', newChannel);
+
+	    request.send(data);
+
 	    document.querySelector('#channelName').value = '';
-	    var form = document.getElementById('channelForm');
 		form.style.display = 'none';
     });
 
