@@ -9,14 +9,15 @@
 <body data-gr-c-s-loaded="true">
 	<div class="container-fluid col-md-3 col-12" id="sidebar"> 
 		<div>
-			<img class="" id="logo-small" src="../static/media/logo-sm.jpg" alt="FLACK- a cs50w project">
+			<img class="" id="logoSmall" src="../static/media/logo-sm.jpg" alt="FLACK- a cs50w project">
 		</div>
 		<div id="channels">
 			<h3>Channels</h3>
-			<button id="new-channel" class="icon"><i class="fas fa-plus"></i></button>
-			<div id="channels-list">
+			<button id="newChannelBtn" class="icon"><i class="fas fa-plus"></i></button>
+			<div id="channelsList">
 				<span>Add the first channel!</span>
-				<table id="channels-table" class="table table-hover">
+				<form id="channelForm" onsubmit="return false;"><input id="channelName" type="text" required autofocus><button type="submit" id="save" class="icon"><i class="fas fa-save"></i></button></form>
+				<table id="channelsTable" class="table table-hover">
 				  <thead>
 				  </thead>
 				  <tbody>

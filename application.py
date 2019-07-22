@@ -16,6 +16,8 @@ app.config["SESSION_PERMANENT"] = True
 app.config["SESSION_TYPE"] = "filesystem"
 Session(app)
 
+channels = []
+
 def display_name_required(f):
 	@wraps(f)
 	def decorated_function(*args, **kwargs):
@@ -55,5 +57,8 @@ def clear_name():
 def add_channel():
 	#TODO form error handling- empty value, same name, lenght up to 60characters??, escape special characters
 	#TODO creating the channel
+	channelName = "This name"
+	newChannel = Channel(channelName)
+	channels.append(newChannel)
 	#TODO preparing the response
 	return redirect(url_for('index'))

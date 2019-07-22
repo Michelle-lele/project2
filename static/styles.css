@@ -23,23 +23,27 @@ body .form-signin{
   max-height: 100vh;
 }
 
-#channels-list{
+#channelForm{
+  display: none;
+}
+
+#channelsList{
   max-height: 70vh;
   overflow: scroll;
   overflow-y: auto;
   overflow-x: hidden;
 }
 
-#add-channel{
+#addChannel{
   margin-bottom: 5px;
 }
 
-#channel-name{
+#channelName{
   width: 85%;
 }
 
 
-#logo-small{
+#logoSmall{
   width: 100%;
   max-width: 280px;
   margin-bottom: 20px;
