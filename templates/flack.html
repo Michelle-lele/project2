@@ -3,6 +3,7 @@
 {% block head %}
 <!-- JavaScript -->
 	<script type="text/javascript" src="../static/script.js"></script>
+	<script src="https://cdn.socket.io/socket.io-1.0.0.js"></script>
 {% endblock %}
 
 {% block body %}
@@ -15,12 +16,18 @@
 			<h3>Channels</h3>
 			<button id="newChannelBtn" class="icon"><i class="fas fa-plus"></i></button>
 			<div id="channelsList">
+				{% if channels == None %}
 				<span>Add the first channel!</span>
+				{% endif %}
+				<span id="infoMessage"></span>
 				<form id="channelForm" onsubmit="return false;"><input id="channelName" type="text" required autofocus><button type="submit" id="save" class="icon"><i class="fas fa-save"></i></button></form>
 				<table id="channelsTable" class="table table-hover">
 				  <thead>
 				  </thead>
 				  <tbody>
+				  	{% for channel in channels|sort(attribute='name') %}
+				  	<tr><td>{{ channel['name'] }}</td></tr>
+				  	{% endfor %}
 				  </tbody>
 				</table>
 			</div>

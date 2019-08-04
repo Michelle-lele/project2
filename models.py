@@ -22,6 +22,12 @@ class Channel:
 		message = Message(text, user)
 		self.messages.append(message)
 
+	def serialize(self):
+		return{
+			'name': self.name,
+		}
+	
+
 class Message:
 	def __init__(self, text, user):
 		self.text = text
