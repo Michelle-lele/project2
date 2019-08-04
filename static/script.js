@@ -14,18 +14,18 @@ document.addEventListener('DOMContentLoaded', () => {
 	    request.open('POST', '/add-channel');
 
 	    request.onload = () =>{
-	    	console.log(request.responseText);
+	    	console.log(request);
 	    	const data = JSON.parse(request.responseText);
-	    	console.log(data.success);
+	    	console.log(request.status);
 	    	//fix the condition, returns undefined
-		    	if (data.success) {
+		    	if (request.status == 200) {
 		    		var myTable = document.querySelector('#channelsTable');
 	    			var tr = myTable.insertRow(0);
 	    			var td = tr.insertCell(0);
 	    			td.innerHTML = newChannel;
 		    	}
 		    	else {
-		    		console.log('Woops!');
+		    		console.log(`Woops! ${data.status}`);
 		    	}
 	    }
 

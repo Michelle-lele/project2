@@ -67,6 +67,6 @@ def add_channel():
 
 	newChannel = Channel(channelName)
 	channels.append(newChannel)
-
+	print(channelName, file=sys.stderr)
 	#TODO preparing the response
 	return jsonify(channelName)
