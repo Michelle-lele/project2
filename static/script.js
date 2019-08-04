@@ -5,6 +5,7 @@ document.addEventListener('DOMContentLoaded', () => {
 	var form = document.getElementById('channelForm');
 	var info_message =document.querySelector("#infoMessage");
 	var newChannelname = document.getElementById('channelName');
+	var myTable = document.querySelector('#channelsTable');
 
   	newChannelBtn.addEventListener('click', () => {
 	form.style.display = 'block';
@@ -24,10 +25,10 @@ document.addEventListener('DOMContentLoaded', () => {
 		    	const data = JSON.parse(request.responseText);
 		    	//fix the condition, returns undefined
 			    	if (request.status == 200 && data.status == 200) {
-			    		var myTable = document.querySelector('#channelsTable');
 		    			var tr = myTable.insertRow(0);
 		    			var td = tr.insertCell(0);
 		    			td.innerHTML = newChannel;
+
 						form.style.display = 'none';
 						socket.emit('submit channel', {'aNewChannel': newChannel});
 			    	}
@@ -47,8 +48,7 @@ document.addEventListener('DOMContentLoaded', () => {
 	});
 
 	socket.on('announce new channel', data =>{
-		aNewChannel = data;
-		var myTable = document.querySelector('#channelsTable');
+		aNewChannel = data.aNewChannel;
 		var tr = myTable.insertRow(0);
 		var td = tr.insertCell(0);
 		td.innerHTML = aNewChannel;

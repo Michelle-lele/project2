@@ -79,4 +79,4 @@ def submit_channel(data):
 	print("Sucessful emit for submitted channel!", file=sys.stderr)
 	aNewChannel = data["aNewChannel"]
 	print(aNewChannel, file=sys.stderr)
-	emit("announce new channel", aNewChannel, broadcast=True)
+	emit("announce new channel", {'aNewChannel': aNewChannel,}, broadcast=True, include_self=False)
