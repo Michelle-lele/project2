@@ -25,9 +25,7 @@ document.addEventListener('DOMContentLoaded', () => {
 		    	const data = JSON.parse(request.responseText);
 		    	//fix the condition, returns undefined
 			    	if (request.status == 200 && data.status == 200) {
-		    			var tr = myTable.insertRow(0);
-		    			var td = tr.insertCell(0);
-		    			td.innerHTML = newChannel;
+		    			addChannelToTable(newChannel);
 
 						form.style.display = 'none';
 						socket.emit('submit channel', {'aNewChannel': newChannel});
@@ -48,9 +46,12 @@ document.addEventListener('DOMContentLoaded', () => {
 	});
 
 	socket.on('announce new channel', data =>{
-		aNewChannel = data.aNewChannel;
+		addChannelToTable(data.aNewChannel);
+	});
+
+	function addChannelToTable(aNewChannel){
 		var tr = myTable.insertRow(0);
 		var td = tr.insertCell(0);
 		td.innerHTML = aNewChannel;
-	});
+	}
 });

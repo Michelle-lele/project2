@@ -26,7 +26,8 @@
 				  </thead>
 				  <tbody>
 				  	{% for channel in channels|sort(attribute='name') %}
-				  	<tr><td>{{ channel['name'] }}</td></tr>
+				  	<tr><td><a class="channel-item" title="Click to show messages"
+ href="#" onclick="showChannel();return false;">{{ channel['name'] }}</a></td></tr>
 				  	{% endfor %}
 				  </tbody>
 				</table>

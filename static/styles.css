@@ -53,6 +53,10 @@ body .form-signin{
   ;
 }
 
+a {
+  text-decoration: none;
+}
+
 .icon{
   border: none;
   background-color: white;

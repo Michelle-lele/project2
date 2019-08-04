@@ -13,6 +13,7 @@ class Channel:
 		self.name = name #should satisfy the rule for unique channel name, if not unique what? 
 		self.users = []
 		self.messages = []
+		self.created = datetime.datetime.now();
 
 	def add_user(self, user):
 		self.users.append(user)
@@ -25,6 +26,7 @@ class Channel:
 	def serialize(self):
 		return{
 			'name': self.name,
+			'created': self.created,
 		}
 	
 
