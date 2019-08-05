@@ -50,8 +50,19 @@ document.addEventListener('DOMContentLoaded', () => {
 	});
 
 	function addChannelToTable(aNewChannel){
+		var a = document.createElement('a');
+		a.setAttribute("class", "channel-item");
+		a.setAttribute("title", "Click to show messages");
+		a.setAttribute("href","#");
+		a.setAttribute("onclick", "showChannel();return false;");
+		a.innerHTML =aNewChannel;
 		var tr = myTable.insertRow(0);
 		var td = tr.insertCell(0);
-		td.innerHTML = aNewChannel;
+		td.appendChild(a);
 	}
+
+	function showChannel{
+		//add AJAX request here to get channel data
+	}
+	
 });

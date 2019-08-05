@@ -1,8 +1,11 @@
 import datetime
 
 class User:
+	_registry = []
+
 	def __init__(self, user):
 		self.user = user
+		self._registry.append(self.user)
 
 		def current_channel(self, channel_name):
 			self.current_channel = Channel.name
@@ -14,6 +17,9 @@ class Channel:
 		self.users = []
 		self.messages = []
 		self.created = datetime.datetime.now();
+
+	def created_by(self, user):
+		self.created_by = user
 
 	def add_user(self, user):
 		self.users.append(user)
@@ -27,6 +33,7 @@ class Channel:
 		return{
 			'name': self.name,
 			'created': self.created,
+			'created_by': self.created_by
 		}
 	
 

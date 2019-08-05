@@ -5,6 +5,9 @@
         <div class="text-center mb-4">
           <img class="mb-4" src="../static/media/logo.png" alt="FLACK- a cs50w project" width="200" height="200">
           <h6 class="h3 mb-3 font-weight-normal">A CS50W project!</h6>
+          {% if error %}
+          <h6 class="h5 mb-3 font-weight-normal error-message">{{error}}</h6>
+          {% endif %}
           <p></p>
         </div>
 

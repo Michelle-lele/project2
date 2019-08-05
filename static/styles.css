@@ -53,8 +53,9 @@ body .form-signin{
   ;
 }
 
-a {
-  text-decoration: none;
+.channel-item a{
+  text-decoration: none !important;
+  color: red !important;
 }
 
 .icon{
@@ -62,6 +63,10 @@ a {
   background-color: white;
   color: #4E95D7;
   font-size: 18pt;
+}
+
+.error-message{
+  color: red;
 }
 
 .form-signin {

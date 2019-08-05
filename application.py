@@ -16,7 +16,6 @@ app.config["SESSION_PERMANENT"] = True
 app.config["SESSION_TYPE"] = "filesystem"
 Session(app)
 
-global user
 
 global channels
 channels = []
@@ -28,7 +27,6 @@ def display_name_required(f):
 	def decorated_function(*args, **kwargs):
 		if not session.get("user"):
 			return redirect(url_for("login"))
-		user = User(session.get("user"))
 		return f(*args, **kwargs)
 	return decorated_function
 
@@ -45,9 +43,15 @@ def login():
 	if request.method == "POST":
 		if request.form.get("display-name") == None:
 			error = "Display Name is required my friend!"
-			return render_template("name.html", error)
+			return render_template("name.html", error = error)
+		
+		for user in User._registry:
+			if user == request.form.get("display-name"):
+				error = f"Display name already exists!"
+				return render_template("name.html", error = error)
 
 		session["user"] = request.form.get("display-name")
+		newUser = User(session.get("user"))
 		return redirect(url_for("index"))
 
 	return render_template("name.html")
@@ -71,6 +75,7 @@ def add_channel():
 			return jsonify ({'status': 400,'error': error,})
 
 	newChannel = Channel(channelName)
+	newChannel.created_by(session.get("user"))
 	channels.append(newChannel.serialize())
 	print(channels, file=sys.stderr)
 
