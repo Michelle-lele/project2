@@ -13,7 +13,7 @@ class User:
 
 class Channel:
 	def __init__(self, name):
-		self.name = name #should satisfy the rule for unique channel name, if not unique what? 
+		self.name = name
 		self.users = []
 		self.messages = []
 		self.created = datetime.datetime.now();
@@ -33,7 +33,8 @@ class Channel:
 		return{
 			'name': self.name,
 			'created': self.created,
-			'created_by': self.created_by
+			'created_by': self.created_by,
+			'users': self.users
 		}
 	
 
@@ -42,26 +43,3 @@ class Message:
 		self.text = text
 		self.timestamp = datetime.datetime.now()
 		self.user = user
-
-def main():
-	User1 = User("Michelle")
-	User2 = User("Anonymous")
-	NewChannel = Channel("Michelle's Channel")
-	NewChannel.add_user(User1)
-
-	print(f"{NewChannel.name} users:")
-	for user in NewChannel.users:
-		print(f"{user}")
-
-	NewChannel.add_message("Hi, this is my first message", User2)
-	NewChannel.add_message("Hey you, second message", User1)
-	print(f"{NewChannel.name} messages:")
-	for message in NewChannel.messages:
-		print(f"{message.user} says: {message.text}")
-		print(f"{message.timestamp}")
-
-	User1.current_channel(NewChannel.name)
-	print(f"{User1.current_channel}")
-
-if __name__=="__main__":
-	main()

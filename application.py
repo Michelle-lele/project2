@@ -20,8 +20,6 @@ Session(app)
 global channels
 channels = []
 
-
-
 def display_name_required(f):
 	@wraps(f)
 	def decorated_function(*args, **kwargs):
@@ -74,8 +72,10 @@ def add_channel():
 			error = f"Channel with name \'{channelName}\' already exists!"
 			return jsonify ({'status': 400,'error': error,})
 
+	#create channel
 	newChannel = Channel(channelName)
 	newChannel.created_by(session.get("user"))
+	newChannel.add_user(session.get("user"))
 	channels.append(newChannel.serialize())
 	print(channels, file=sys.stderr)
 
@@ -86,3 +86,11 @@ def add_channel():
 def submit_channel(data):
 	aNewChannel = data["aNewChannel"]
 	emit("announce new channel", {'aNewChannel': aNewChannel,}, broadcast=True, include_self=False)
+
+
+@app.route('/get-channel', methods=['POST'])
+def get_channel():
+	for channel in channels:
+		if request.form.get("channelName") == channel['name']:
+			return jsonify({'status':200, 'channel': channel})
+	return jsonify({'status': 404, 'error': "Channel doesn't exist!"})

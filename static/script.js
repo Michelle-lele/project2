@@ -23,18 +23,17 @@ document.addEventListener('DOMContentLoaded', () => {
 
 		    request.onload = () =>{
 		    	const data = JSON.parse(request.responseText);
-		    	//fix the condition, returns undefined
-			    	if (request.status == 200 && data.status == 200) {
-		    			addChannelToTable(newChannel);
+			    if (request.status == 200 && data.status == 200) {
+		    		addChannelToTable(newChannel);
 
-						form.style.display = 'none';
-						socket.emit('submit channel', {'aNewChannel': newChannel});
+					form.style.display = 'none';
+					socket.emit('submit channel', {'aNewChannel': newChannel});
 			    	}
-			    	else {
-			    		info_message.innerHTML = `${data.error}`;
-			    		info_message.style.color = 'red';
-			    		newChannelname.focus();
-			    	}
+			    else {
+			    	info_message.innerHTML = `${data.error}`;
+			    	info_message.style.color = 'red';
+			    	newChannelname.focus();
+			    }
 		    }
 
 		    const data = new FormData();
@@ -49,20 +48,46 @@ document.addEventListener('DOMContentLoaded', () => {
 		addChannelToTable(data.aNewChannel);
 	});
 
+	//load channel content
+	document.querySelectorAll(".channel-item").forEach(link =>{
+		link.onclick = () =>{
+			channelName = link.dataset.channel; //or use innerHTML
+			getChannel(channelName);
+		};
+	});
+
 	function addChannelToTable(aNewChannel){
 		var a = document.createElement('a');
 		a.setAttribute("class", "channel-item");
 		a.setAttribute("title", "Click to show messages");
 		a.setAttribute("href","#");
-		a.setAttribute("onclick", "showChannel();return false;");
+		a.setAttribute("data-channel",aNewChannel);
 		a.innerHTML =aNewChannel;
 		var tr = myTable.insertRow(0);
 		var td = tr.insertCell(0);
 		td.appendChild(a);
-	}
+	};
 
-	function showChannel{
-		//add AJAX request here to get channel data
-	}
-	
+	function getChannel(channelName){
+		const request = new XMLHttpRequest();
+
+		request.open('POST', '/get-channel');
+
+		request.onload = () =>{
+		    const data = JSON.parse(request.responseText);
+			    if (request.status == 200 && data.status == 200) {
+			    	//to show channel name and creation time
+			    	document.querySelector("#channel-details").innerHTML = `${data.channel.name}, created ${data.channel.created}`;
+			    }
+			    else {
+			    	//show some error message
+			    	console.log("Something went wrong! Channel cannot be loaded :(");
+			    }
+		    }
+
+		const data = new FormData();
+		data.append('channelName', channelName);
+
+		request.send(data);
+	};
 });

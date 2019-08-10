@@ -11,6 +11,10 @@
 	<div class="container-fluid col-md-3 col-12" id="sidebar"> 
 		<div>
 			<img class="" id="logoSmall" src="../static/media/logo-sm.jpg" alt="FLACK- a cs50w project">
+			<h2 class="">{{ session.get("user") }}</h2>
+			<form method="POST" action="/clear-name">
+				<button type="submit" class="icon"><i class="fas fa-user-edit"></i></button>
+			</form>
 		</div>
 		<div id="channels">
 			<h3>Channels</h3>
@@ -26,8 +30,8 @@
 				  </thead>
 				  <tbody>
 				  	{% for channel in channels|sort(attribute='name') %}
-				  	<tr><td><a class="channel-item" title="Click to show messages"
- href="#" onclick="showChannel();return false;">{{ channel['name'] }}</a></td></tr>
+				  	<tr><td><a class="channel-item" title="Click to show messages" data-channel="{{ channel['name'] }}"
+ href="#">{{ channel['name'] }}</a></td></tr>
 				  	{% endfor %}
 				  </tbody>
 				</table>
@@ -36,12 +40,8 @@
 	</div>
 	<div class="container-fluid col-md-9 col-12">
 		<div>
-			<h2 class="">{{ session.get("user") }}</h2>
-			<form method="POST" action="/clear-name">
-				<button type="submit" class="icon"><i class="fas fa-user-edit"></i></button>
-			</form>
-			<h2>in Channel Name here :P</h2>
+			<h4 id="channel-details"></h4>
 		</div>
 	</div>
-</body>	
+</body>
 {% endblock %}
