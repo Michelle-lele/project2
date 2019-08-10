@@ -1,6 +1,7 @@
 document.addEventListener('DOMContentLoaded', () => {
 	var socket = io.connect(location.protocol + '//' + document.domain + ':' + location.port);
 
+	//Add new channel and emit event to all other users
 	var newChannelBtn = document.getElementById('newChannelBtn');
 	var form = document.getElementById('channelForm');
 	var info_message =document.querySelector("#infoMessage");
@@ -48,14 +49,6 @@ document.addEventListener('DOMContentLoaded', () => {
 		addChannelToTable(data.aNewChannel);
 	});
 
-	//load channel content
-	document.querySelectorAll(".channel-item").forEach(link =>{
-		link.onclick = () =>{
-			channelName = link.dataset.channel; //or use innerHTML
-			getChannel(channelName);
-		};
-	});
-
 	function addChannelToTable(aNewChannel){
 		var a = document.createElement('a');
 		a.setAttribute("class", "channel-item");
@@ -66,7 +59,19 @@ document.addEventListener('DOMContentLoaded', () => {
 		var tr = myTable.insertRow(0);
 		var td = tr.insertCell(0);
 		td.appendChild(a);
+		a.addEventListener('click', () =>{
+			getChannel(aNewChannel);
+		});
 	};
+
+	//load channel content
+	document.querySelectorAll(".channel-item").forEach(link =>{
+		link.onclick = () =>{
+			channelName = link.dataset.channel; //or use innerHTML
+			getChannel(channelName);
+		};
+	});
+
 
 	function getChannel(channelName){
 		const request = new XMLHttpRequest();
