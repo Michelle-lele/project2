@@ -16,15 +16,19 @@ app.config["SESSION_PERMANENT"] = True
 app.config["SESSION_TYPE"] = "filesystem"
 Session(app)
 
+SYSTEM_USER = "FlackBot"
+global systemUser
+systemUser = User(SYSTEM_USER)
 
 global channels
 channels = []
+
 
 def display_name_required(f):
 	@wraps(f)
 	def decorated_function(*args, **kwargs):
 		if not session.get("user"):
-			return redirect(url_for("login"))
+			return redirect(url_for("login")) 
 		return f(*args, **kwargs)
 	return decorated_function
 
@@ -48,8 +52,8 @@ def login():
 				error = f"Display name already exists!"
 				return render_template("name.html", error = error)
 
-		session["user"] = request.form.get("display-name")
-		newUser = User(session.get("user"))
+		newUser = User(request.form.get("display-name"))
+		session["user"] = newUser
 		return redirect(url_for("index"))
 
 	return render_template("name.html")
@@ -76,6 +80,9 @@ def add_channel():
 	newChannel = Channel(channelName)
 	newChannel.created_by(session.get("user"))
 	newChannel.add_user(session.get("user"))
+	print(session.get("user"), file=sys.stderr)
+	newChannel.add_message(f"{session.get('user')} created {channelName}!", systemUser)
+	newChannel.add_message(f"{session.get('user')} joined {channelName}!", systemUser)
 	channels.append(newChannel.serialize())
 	print(channels, file=sys.stderr)
 

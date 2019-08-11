@@ -1,5 +1,8 @@
 document.addEventListener('DOMContentLoaded', () => {
 	var socket = io.connect(location.protocol + '//' + document.domain + ':' + location.port);
+	
+	//Load channels list
+
 
 	//Add new channel and emit event to all other users
 	var newChannelBtn = document.getElementById('newChannelBtn');
@@ -59,6 +62,8 @@ document.addEventListener('DOMContentLoaded', () => {
 		var tr = myTable.insertRow(0);
 		var td = tr.insertCell(0);
 		td.appendChild(a);
+		getChannel(aNewChannel);
+
 		a.addEventListener('click', () =>{
 			getChannel(aNewChannel);
 		});
@@ -82,7 +87,8 @@ document.addEventListener('DOMContentLoaded', () => {
 		    const data = JSON.parse(request.responseText);
 			    if (request.status == 200 && data.status == 200) {
 			    	//to show channel name and creation time
-			    	document.querySelector("#channel-details").innerHTML = `${data.channel.name}, created ${data.channel.created}`;
+			    	document.querySelector("#current-channel").innerHTML = `${data.channel.name}`;
+			    	document.querySelector("#channel-details").innerHTML = `created ${data.channel.created}`;
 			    }
 			    else {
 			    	//show some error message
