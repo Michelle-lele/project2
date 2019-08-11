@@ -80,6 +80,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
 	//get all data for specific channel
 	function getChannel(channelName){
+		messages_div.innerHTML = "";
 		const request = new XMLHttpRequest();
 
 		request.open('POST', '/get-channel');
@@ -119,8 +120,33 @@ document.addEventListener('DOMContentLoaded', () => {
 	function addMessage(text, user, timestamp){
 		var div = document.createElement('div');
 		div.setAttribute("class", "message-item");
-		div.innerHTML = `${user} says: ${text} - ${timestamp}`;
 		messages_div.appendChild(div);
 
-	}
+
+		//need to get rid of that :/
+		var divTimestamp = document.createElement('span');
+		divTimestamp.setAttribute("class", "message-timestamp");
+		divTimestamp.innerHTML = `${timestamp}`;
+		div.appendChild(divTimestamp);
+
+		user = user.toUpperCase();
+		var divDisplayName = document.createElement('div');
+		divDisplayName.setAttribute("class", "display-name");
+		divDisplayName.innerHTML = `${user}:`;
+		div.appendChild(divDisplayName);
+
+
+		var divMessage = document.createElement('div');
+		divMessage.setAttribute("class", "message-text");
+		divMessage.innerHTML = `${text}`;
+		div.appendChild(divMessage);
+
+		var leftQuote = document.createElement('i');
+		leftQuote.setAttribute("class", "fas fa-quote-left");
+		divMessage.insertBefore(leftQuote, divMessage.firstChild);
+
+		var rightQuote = document.createElement('i');
+		rightQuote.setAttribute("class", "fas fa-quote-right");
+		divMessage.appendChild(rightQuote);
+	};
 });

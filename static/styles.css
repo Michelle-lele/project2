@@ -74,8 +74,36 @@ body .form-signin{
   border-radius: 30px 30px 5px 30px;
   background-color: #4E95D7;
   color: white;
-  margin-top: 15px;
-  padding: 20px 35px;
+  margin-top: 10px;
+  padding: 10px 25px;
+  width: 100%;
+  max-width: px;
+  float: ;
+}
+.display-name{
+  font-size: 12pt;
+}
+
+.message-text{
+  font-style: italic;
+  font-size: 13pt;
+  width: 100%;
+}
+
+.message-text .fa-quote-left{
+  margin-right: 5px;
+  font-size: 15px;
+}
+
+.message-text .fa-quote-right{
+  margin-left: 5px;
+  font-size: 15px;
+}
+
+.message-timestamp{
+  float: right;
+  font-size: 10pt;
+  margin-bottom: 15px;
 }
 
 .form-signin {

@@ -81,8 +81,8 @@ def add_channel():
 	newChannel.created_by(session.get("user"))
 	newChannel.add_user(session.get("user"))
 	print(session.get("user"), file=sys.stderr)
-	newChannel.add_message(f"{session.get('user')} created \"{channelName}\"!", systemUser)
-	newChannel.add_message(f"{session.get('user')} joined \"{channelName}\"!", systemUser)
+	newChannel.add_message(f"{session.get('user').user} created \"{channelName}\"!", systemUser)
+	newChannel.add_message(f"{session.get('user').user} joined \"{channelName}\"!", systemUser)
 	channels.append(newChannel.serialize())
 	print(channels, file=sys.stderr)
 

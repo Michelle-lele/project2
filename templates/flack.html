@@ -11,7 +11,7 @@
 	<div class="container-fluid col-md-3 col-12" id="sidebar"> 
 		<div>
 			<img class="" id="logoSmall" src="../static/media/logo-sm.jpg" alt="FLACK- a cs50w project">
-			<h2 class="">{{ session.get("user") }}</h2>
+			<h2 class="">{{ session.get("user").user }}</h2>
 			<form method="POST" action="/clear-name">
 				<button type="submit" class="icon"><i class="fas fa-user-edit"></i></button>
 			</form>
@@ -44,6 +44,16 @@
 			<span id="channel-details"></span>
 		</div>
 		<div id="messages">
+			<!-- <div class="message-item">
+				<div class="display-name">FlackBot says:	
+				</div>
+				<span class="message-timestamp">Sun, 11 Aug 2019 20:36:30 GMT</span>
+				<div class="message-text">
+					<i class="fas fa-quote-left"></i>Michelle-lele created "Just Another test CHannels, probably the millionth already!"!
+					<i class="fas fa-quote-right"></i>
+				</div>
+
+			</div>-->
 		</div>
 	</div>
 </body>

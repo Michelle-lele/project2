@@ -22,10 +22,10 @@ class Channel:
 		self.created = datetime.datetime.now();
 
 	def created_by(self, user):
-		self.created_by = user
+		self.created_by = user.serialize()
 
 	def add_user(self, user):
-		self.users.append(user)
+		self.users.append(user.serialize())
 
 	def add_message(self, text, user):
 		#to satisfy the 100 messages requirement, so check how many currently, if 100 delete first and add last
