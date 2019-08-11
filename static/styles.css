@@ -69,6 +69,15 @@ body .form-signin{
   color: red;
 }
 
+.message-item{
+  border: 1px solid #4E95D7;
+  border-radius: 30px 30px 5px 30px;
+  background-color: #4E95D7;
+  color: white;
+  margin-top: 15px;
+  padding: 20px 35px;
+}
+
 .form-signin {
   width: 100%;
   max-width: 420px;

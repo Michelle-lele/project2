@@ -10,6 +10,7 @@ document.addEventListener('DOMContentLoaded', () => {
 	var info_message =document.querySelector("#infoMessage");
 	var newChannelname = document.getElementById('channelName');
 	var myTable = document.querySelector('#channelsTable');
+	var messages_div = document.querySelector("#messages");
 
   	newChannelBtn.addEventListener('click', () => {
 	form.style.display = 'block';
@@ -58,7 +59,7 @@ document.addEventListener('DOMContentLoaded', () => {
 		a.setAttribute("title", "Click to show messages");
 		a.setAttribute("href","#");
 		a.setAttribute("data-channel",aNewChannel);
-		a.innerHTML =aNewChannel;
+		a.innerHTML = aNewChannel;
 		var tr = myTable.insertRow(0);
 		var td = tr.insertCell(0);
 		td.appendChild(a);
@@ -77,7 +78,7 @@ document.addEventListener('DOMContentLoaded', () => {
 		};
 	});
 
-
+	//get all data for specific channel
 	function getChannel(channelName){
 		const request = new XMLHttpRequest();
 
@@ -86,13 +87,24 @@ document.addEventListener('DOMContentLoaded', () => {
 		request.onload = () =>{
 		    const data = JSON.parse(request.responseText);
 			    if (request.status == 200 && data.status == 200) {
-			    	//to show channel name and creation time
+			    	//show channel data
 			    	document.querySelector("#current-channel").innerHTML = `${data.channel.name}`;
 			    	document.querySelector("#channel-details").innerHTML = `created ${data.channel.created}`;
-			    	document.querySelector("#messages").innerHTML = `${data.channel.messages[0].message.text}`;
+			    	
+			    	//Iterate all messages and show them
+			    	var messages = data.channel.messages;
+
+			    	for (var i = 0; i < messages.length; i++){
+			    		messText = messages[i].message.text;
+			    		messTimestamp = messages[i].message.timestamp;
+			    		messUser = messages[i].message.user.user;
+
+			    		addMessage(messText, messUser, messTimestamp);
+			    	}
 			    }
 			    else {
 			    	//show some error message
+			    	//TO DO build message div & append message content
 			    	console.log("Something went wrong! Channel cannot be loaded :(");
 			    }
 		    }
@@ -102,4 +114,13 @@ document.addEventListener('DOMContentLoaded', () => {
 
 		request.send(data);
 	};
+
+	//Build message div
+	function addMessage(text, user, timestamp){
+		var div = document.createElement('div');
+		div.setAttribute("class", "message-item");
+		div.innerHTML = `${user} says: ${text} - ${timestamp}`;
+		messages_div.appendChild(div);
+
+	}
 });
