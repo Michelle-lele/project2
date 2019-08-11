@@ -89,6 +89,7 @@ document.addEventListener('DOMContentLoaded', () => {
 			    	//to show channel name and creation time
 			    	document.querySelector("#current-channel").innerHTML = `${data.channel.name}`;
 			    	document.querySelector("#channel-details").innerHTML = `created ${data.channel.created}`;
+			    	document.querySelector("#messages").innerHTML = `${data.channel.messages[0].message.text}`;
 			    }
 			    else {
 			    	//show some error message
