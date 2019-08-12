@@ -118,22 +118,25 @@ document.addEventListener('DOMContentLoaded', () => {
 
 	//Build message div
 	function addMessage(text, user, timestamp){
-		var div = document.createElement('div');
-		div.setAttribute("class", "message-item");
-		messages_div.appendChild(div);
-
+		var divMessageDetails = document.createElement('div');
+		divMessageDetails.setAttribute("class", "message-details");
+		messages_div.appendChild(divMessageDetails);
 
 		//need to get rid of that :/
-		var divTimestamp = document.createElement('span');
-		divTimestamp.setAttribute("class", "message-timestamp");
-		divTimestamp.innerHTML = `${timestamp}`;
-		div.appendChild(divTimestamp);
-
 		user = user.toUpperCase();
 		var divDisplayName = document.createElement('div');
 		divDisplayName.setAttribute("class", "display-name");
 		divDisplayName.innerHTML = `${user}:`;
-		div.appendChild(divDisplayName);
+		divMessageDetails.appendChild(divDisplayName);
+
+		var divTimestamp = document.createElement('span');
+		divTimestamp.setAttribute("class", "message-timestamp");
+		divTimestamp.innerHTML = `${timestamp}`;
+		divMessageDetails.appendChild(divTimestamp);
+
+		var div = document.createElement('div');
+		div.setAttribute("class", "message-item");
+		messages_div.appendChild(div);
 
 
 		var divMessage = document.createElement('div');
