@@ -117,20 +117,21 @@ document.addEventListener('DOMContentLoaded', () => {
 		request.send(data);
 	};
 
+	var divChannelContent = document.getElementById("channel-content");
 	//Build new message form
 	function addMessageForm(){
 		var divNewMessage = document.createElement('div');
+		divChannelContent.appendChild(divNewMessage);
+
 		var formAddMessage = document.createElement('form');
 		formAddMessage.setAttribute("id", "add-message");
 		formAddMessage.setAttribute("onsubmit", "return: false;");
 		divNewMessage.appendChild(formAddMessage);
-		console.log("Should have form by now!");
-
+		
 		var inputNewMessage = document.createElement('input');
 		inputNewMessage.setAttribute("id", "new-message");
 		inputNewMessage.setAttribute("type", "text");
 		formAddMessage.appendChild(inputNewMessage);
-		console.log("Should have text input by now!");
 
 		var buttonNewMessage = document.createElement('button');
 		buttonNewMessage.setAttribute("id", "newMessageBtn");
@@ -141,8 +142,7 @@ document.addEventListener('DOMContentLoaded', () => {
 		var btnSendMessage = document.createElement('i');
 		btnSendMessage.setAttribute("class", "fas fa-paper-plane");
 		buttonNewMessage.appendChild(btnSendMessage);
-		console.log("Should have button by now!");
-
+		
 		//Add new message and emit event to all users
 		var aMessageForm = document.getElementById("add-message");
 
