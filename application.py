@@ -101,3 +101,15 @@ def get_channel():
 		if request.form.get("channelName") == channel['name']:
 			return jsonify({'status':200, 'channel': channel})
 	return jsonify({'status': 404, 'error': "Channel doesn't exist!"})
+
+@app.route('/add-message', methods=['POST'])
+def add_message():
+	return jsonify({'status': 200,'message': "Yohohoohoohohoo! Your message is added!"})
+
+@socketio.on("submit message")
+def submit_message(data):
+	messageText = data["text"]
+	messageUser = session.get("user")
+	channel = data["channel"]
+	aNewMessage = Channel.add_message(messageText, messageUser)
+	emit("announce new message", aNewMessage.serialize, broadcast=True, include_self=False)

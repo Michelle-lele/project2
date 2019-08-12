@@ -53,6 +53,25 @@ body .form-signin{
   ;
 }
 
+#add-message{
+  position: fixed;
+  bottom: 0;
+  width: 100%;
+}
+
+#new-message{
+  width: 300px;
+  height: 40px;
+  border: 1px solid #4E95D7;
+  border-radius: 20px;
+  margin: 10px;
+  padding: 10px;
+}
+
+#new-message::focus{
+
+}
+
 .channel-item a{
   text-decoration: none !important;
   color: red !important;
