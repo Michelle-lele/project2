@@ -99,9 +99,9 @@ document.addEventListener('DOMContentLoaded', () => {
 			    		messUser = messages[i].message.user.user;
 
 			    		setMessages(messText, messUser, messTimestamp);
-
-			    		setMessageForm(data.channel.name);
 			    	}
+
+			    	setMessageForm(data.channel.name);
 			    }
 			    else {
 			    	//show some error message
@@ -127,7 +127,6 @@ document.addEventListener('DOMContentLoaded', () => {
 
 	//Add new message and emit event to all users
 	function addNewMessage(){
-		console.log("whatevaaa");
 		socket.on('connect', () =>{
 		    aMessageForm.addEventListener('submit', () => {
 		    	var newMessage = document.querySelector('#new-message').value;
