@@ -1,8 +1,5 @@
 document.addEventListener('DOMContentLoaded', () => {
 	var socket = io.connect(location.protocol + '//' + document.domain + ':' + location.port);
-	
-	//Load channels list
-
 
 	//Add new channel and emit event to all other users
 	var newChannelBtn = document.getElementById('newChannelBtn');
@@ -10,6 +7,8 @@ document.addEventListener('DOMContentLoaded', () => {
 	var info_message =document.querySelector("#infoMessage");
 	var newChannelname = document.getElementById('channelName');
 	var myTable = document.querySelector('#channelsTable');
+	var messages_div = document.querySelector("#messages");
+	var aMessageForm = document.getElementById('add-message');
 
   	newChannelBtn.addEventListener('click', () => {
 	form.style.display = 'block';
@@ -99,7 +98,7 @@ document.addEventListener('DOMContentLoaded', () => {
 			    		messTimestamp = messages[i].message.timestamp;
 			    		messUser = messages[i].message.user.user;
 
-			    		addMessage(messText, messUser, messTimestamp);
+			    		setMessages(messText, messUser, messTimestamp);
 
 			    		setMessageForm(data.channel.name);
 			    	}
@@ -117,16 +116,18 @@ document.addEventListener('DOMContentLoaded', () => {
 		request.send(data);
 	};
 
-	//var divChannelContent = document.getElementById("channel-content");
+	
 	//Build new message form
 	function setMessageForm(currChannelName){
-		//Add new message and emit event to all users
-		var aMessageForm = document.getElementById("add-message");
-
 		aMessageForm.style.display = 'block';
 		aMessageForm.setAttribute("data-channel", currChannelName);
 
+		addNewMessage();
+	};
 
+	//Add new message and emit event to all users
+	function addNewMessage(){
+		console.log("whatevaaa");
 		socket.on('connect', () =>{
 		    aMessageForm.addEventListener('submit', () => {
 		    	var newMessage = document.querySelector('#new-message').value;
@@ -158,14 +159,10 @@ document.addEventListener('DOMContentLoaded', () => {
 			console.log("New message announced");
 			//TO DO something here
 		});
-
 	};
 
-
 	//Build message div
-	var messages_div = document.querySelector("#messages");
-
-	function addMessage(text, user, timestamp){
+	function setMessages(text, user, timestamp){
 		//need to get rid of that :/
 		var divMessageDetails = document.createElement('div');
 		divMessageDetails.setAttribute("class", "message-details");
@@ -201,6 +198,3 @@ document.addEventListener('DOMContentLoaded', () => {
 		divMessage.appendChild(rightQuote);
 	};
 });
-
-
-
