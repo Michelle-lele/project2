@@ -100,6 +100,8 @@ document.addEventListener('DOMContentLoaded', () => {
 			    		messUser = messages[i].message.user.user;
 
 			    		addMessage(messText, messUser, messTimestamp);
+
+			    		setMessageForm(data.channel.name);
 			    	}
 			    }
 			    else {
@@ -107,8 +109,6 @@ document.addEventListener('DOMContentLoaded', () => {
 			    	//TO DO build message div & append message content
 			    	console.log("Something went wrong! Channel cannot be loaded :(");
 			    }
-
-			    addMessageForm();
 		    }
 
 		const data = new FormData();
@@ -117,34 +117,15 @@ document.addEventListener('DOMContentLoaded', () => {
 		request.send(data);
 	};
 
-	var divChannelContent = document.getElementById("channel-content");
+	//var divChannelContent = document.getElementById("channel-content");
 	//Build new message form
-	function addMessageForm(){
-		var divNewMessage = document.createElement('div');
-		divChannelContent.appendChild(divNewMessage);
-
-		var formAddMessage = document.createElement('form');
-		formAddMessage.setAttribute("id", "add-message");
-		formAddMessage.setAttribute("onsubmit", "return: false;");
-		divNewMessage.appendChild(formAddMessage);
-		
-		var inputNewMessage = document.createElement('input');
-		inputNewMessage.setAttribute("id", "new-message");
-		inputNewMessage.setAttribute("type", "text");
-		formAddMessage.appendChild(inputNewMessage);
-
-		var buttonNewMessage = document.createElement('button');
-		buttonNewMessage.setAttribute("id", "newMessageBtn");
-		buttonNewMessage.setAttribute("class", "icon");
-		buttonNewMessage.setAttribute("type", "submit");
-		formAddMessage.appendChild(buttonNewMessage);
-
-		var btnSendMessage = document.createElement('i');
-		btnSendMessage.setAttribute("class", "fas fa-paper-plane");
-		buttonNewMessage.appendChild(btnSendMessage);
-		
+	function setMessageForm(currChannelName){
 		//Add new message and emit event to all users
 		var aMessageForm = document.getElementById("add-message");
+
+		aMessageForm.style.display = 'block';
+		aMessageForm.setAttribute("data-channel", currChannelName);
+
 
 		socket.on('connect', () =>{
 		    aMessageForm.addEventListener('submit', () => {

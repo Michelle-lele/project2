@@ -57,6 +57,7 @@ body .form-signin{
   position: fixed;
   bottom: 0;
   width: 100%;
+  display: none;
 }
 
 #new-message{
