@@ -9,6 +9,7 @@ document.addEventListener('DOMContentLoaded', () => {
 	var myTable = document.querySelector('#channelsTable');
 	var messages_div = document.querySelector("#messages");
 	var aMessageForm = document.getElementById('add-message');
+	var newMessageBtn = document.getElementById('newMessageBtn');
 
   	newChannelBtn.addEventListener('click', () => {
 	form.style.display = 'block';
@@ -96,9 +97,9 @@ document.addEventListener('DOMContentLoaded', () => {
 			    	for (var i = 0; i < messages.length; i++){
 			    		messText = messages[i].message.text;
 			    		messTimestamp = messages[i].message.timestamp;
-			    		messUser = messages[i].message.user.user;
+			    		messUser = messages[i].message.user;
 
-			    		setMessages(messText, messUser, messTimestamp);
+			    		addMessage(messText, messUser, messTimestamp);
 			    	}
 
 			    	setMessageForm(data.channel.name);
@@ -117,51 +118,63 @@ document.addEventListener('DOMContentLoaded', () => {
 	};
 
 	
-	//Build new message form
+	//Build new message form and add event for add & emit new message 
 	function setMessageForm(currChannelName){
 		aMessageForm.style.display = 'block';
 		aMessageForm.setAttribute("data-channel", currChannelName);
 
-		addNewMessage();
 	};
 
-	//Add new message and emit event to all users
-	function addNewMessage(){
-		socket.on('connect', () =>{
-		    aMessageForm.addEventListener('submit', () => {
-		    	var newMessage = document.querySelector('#new-message').value;
+	//TODO fix that validation
+	var inputNewMessage = document.querySelector("#new-message");
+	newMessageBtn.disabled = true;
 
-			    const request = new XMLHttpRequest();
+	inputNewMessage.onkeyup = () =>{
+		if (inputNewMessage.value.length > 0){
+				newMessageBtn.disabled = false;
+		}
+		else{
+				newMessageBtn.disabled = true;
+		}
+	};
 
-			    request.open('POST', '/add-message');
+	socket.on('connect', () =>{
+		aMessageForm.addEventListener('submit', () => {
+		var newMessage = document.querySelector('#new-message').value;
 
-			    request.onload = () =>{
-			    	const data = JSON.parse(request.responseText);
-				    if (request.status == 200 && data.status == 200) {
-				    	//TO DO something here
-						socket.emit('submit message', {'aNewMessage': newMessage});
-				    	}
-				    else {
-				    	//TO FO else here
+
+		const request = new XMLHttpRequest();
+
+		request.open('POST', '/add-message');
+
+		request.onload = () =>{
+			const data = JSON.parse(request.responseText);
+
+			if (request.status == 200 && data.status == 200) {
+				//TO DO something here
+				socket.emit('submit message', {'data': data.message});
 				    }
-			    }
+			else {
+				    //TO FO else here
+				}
+		}
 
-			    const data = new FormData();
-				data.append('text', newMessage);
+		const data = new FormData();
+		data.append('text', newMessage);
+		data.append('channel', aMessageForm.dataset.channel);
 
-			    request.send(data);
-			   	document.querySelector('#new-message').value = '';
-		    });
+		request.send(data);
+		document.querySelector('#new-message').value = '';
 		});
+	});
 
-		socket.on('announce new message', data =>{
-			console.log("New message announced");
-			//TO DO something here
-		});
-	};
+	socket.on('announce new message', data =>{
+		addMessage(data.message.text, data.message.user,data.message.timestamp);
+	});
 
-	//Build message div
-	function setMessages(text, user, timestamp){
+
+	//Add message div
+	function addMessage(text, user, timestamp){
 		//need to get rid of that :/
 		var divMessageDetails = document.createElement('div');
 		divMessageDetails.setAttribute("class", "message-details");

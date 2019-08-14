@@ -15,22 +15,26 @@ class User:
 		}
 
 class Channel:
+	_registry = []
+
 	def __init__(self, name):
 		self.name = name
 		self.users = []
 		self.messages = []
 		self.created = datetime.datetime.now();
+		self._registry.append(self)
 
 	def created_by(self, user):
-		self.created_by = user.serialize()
+		self.created_by = user.user
 
 	def add_user(self, user):
-		self.users.append(user.serialize())
+		self.users.append(user.user) #TODO check if user exists, add method to User class?
 
 	def add_message(self, text, user):
-		#to satisfy the 100 messages requirement, so check how many currently, if 100 delete first and add last
+		#TODO satisfy the 100 messages requirement, so check how many currently, if 100 delete first and add last
 		message = Message(text, user)
 		self.messages.append(message.serialize())
+		return message
 
 	def serialize(self):
 		return{
@@ -46,13 +50,13 @@ class Message:
 	def __init__(self, text, user):
 		self.text = text
 		self.timestamp = datetime.datetime.now()
-		self.user = user
+		self.user = user.user #TODO check if user exists, add method to User class?
 
 	def serialize(self):
 		return {'message': 
 					{
 						'text': self.text,
 						'timestamp': self.timestamp,
-						'user': self.user.serialize()
+						'user': self.user
 					}
 		}

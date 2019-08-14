@@ -80,12 +80,9 @@ def add_channel():
 	newChannel = Channel(channelName)
 	newChannel.created_by(session.get("user"))
 	newChannel.add_user(session.get("user"))
-	print(session.get("user"), file=sys.stderr)
 	newChannel.add_message(f"{session.get('user').user} created \"{channelName}\"!", systemUser)
 	newChannel.add_message(f"{session.get('user').user} joined \"{channelName}\"!", systemUser)
 	channels.append(newChannel.serialize())
-	print(channels, file=sys.stderr)
-
 	return jsonify({'status': 200,'channels': channels,})
 
 
@@ -100,16 +97,27 @@ def get_channel():
 	for channel in channels:
 		if request.form.get("channelName") == channel['name']:
 			return jsonify({'status':200, 'channel': channel})
+	
 	return jsonify({'status': 404, 'error': "Channel doesn't exist!"})
 
 @app.route('/add-message', methods=['POST'])
 def add_message():
-	return jsonify({'status': 200,'message': "Yohohoohoohohoo! Your message is added!"})
+	if request.form.get("text") == "":
+		return jsonify({'status': 404, 'error': "Message cannot be blank!"})
+
+	messageText = request.form.get("text")
+	messageUser = session.get("user")
+
+	for channel in Channel._registry:
+		if channel.name == request.form.get("channel"):
+			aNewMessage = channel.add_message(messageText, messageUser)
+			print(f"aNewMessage: {aNewMessage.serialize()}", file=sys.stderr)
+			return jsonify({'status': 200,'message': aNewMessage.serialize()})
+
+	return jsonify({'status': 404, 'error': "Channel doesn't exist!"})
 
 @socketio.on("submit message")
 def submit_message(data):
-	messageText = data["text"]
-	messageUser = session.get("user")
-	channel = data["channel"]
-	aNewMessage = Channel.add_message(messageText, messageUser)
-	emit("announce new message", aNewMessage.serialize, broadcast=True, include_self=False)
+	data = data["data"]
+	print(data["message"]["text"], file = sys.stderr)
+	emit("announce new message", data, broadcast=True)
