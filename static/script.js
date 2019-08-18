@@ -1,6 +1,12 @@
 document.addEventListener('DOMContentLoaded', () => {
 	var socket = io.connect(location.protocol + '//' + document.domain + ':' + location.port);
 
+	//Add or update current user
+	var currentUser = document.getElementById('currentUser').innerHTML;
+	if (!localStorage.getItem('currentUser') || (localStorage.getItem('currentUser') != currentUser)){
+		localStorage.setItem('currentUser', currentUser);
+	}
+
 	//Add new channel and emit event to all other users
 	var newChannelBtn = document.getElementById('newChannelBtn');
 	var form = document.getElementById('channelForm');
@@ -176,25 +182,28 @@ document.addEventListener('DOMContentLoaded', () => {
 	//Add message div
 	function addMessage(text, user, timestamp){
 		//need to get rid of that :/
+		var div = document.createElement('div');
+		if (user == localStorage.getItem('currentUser')){
+			div.setAttribute("class", "message-item right");
+		}
+		else{
+			div.setAttribute("class", "message-item left");
+		}
+		messages_div.appendChild(div);
+
 		var divMessageDetails = document.createElement('div');
 		divMessageDetails.setAttribute("class", "message-details");
-		messages_div.appendChild(divMessageDetails);
+		div.appendChild(divMessageDetails);
 
-		user = user.toUpperCase();
 		var divDisplayName = document.createElement('div');
 		divDisplayName.setAttribute("class", "display-name");
-		divDisplayName.innerHTML = `${user}:`;
+		divDisplayName.innerHTML = `${user.toUpperCase()}:`;
 		divMessageDetails.appendChild(divDisplayName);
 
 		var divTimestamp = document.createElement('span');
 		divTimestamp.setAttribute("class", "message-timestamp");
 		divTimestamp.innerHTML = `${timestamp}`;
 		divMessageDetails.appendChild(divTimestamp);
-
-		var div = document.createElement('div');
-		div.setAttribute("class", "message-item");
-		messages_div.appendChild(div);
-
 
 		var divMessage = document.createElement('div');
 		divMessage.setAttribute("class", "message-text");
@@ -207,6 +216,6 @@ document.addEventListener('DOMContentLoaded', () => {
 
 		var rightQuote = document.createElement('i');
 		rightQuote.setAttribute("class", "fas fa-quote-right");
-		divMessage.appendChild(rightQuote);
+		divMessage.appendChild(rightQuote);	
 	};
 });

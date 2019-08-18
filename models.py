@@ -9,6 +9,7 @@ class User:
 
 		def current_channel(self, channel_name):
 			self.current_channel = Channel.name
+	
 	def serialize(self):
 		return {
 			'user': self.user

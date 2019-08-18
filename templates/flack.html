@@ -8,10 +8,10 @@
 
 {% block body %}
 <body data-gr-c-s-loaded="true">
-	<div class="container-fluid col-md-3 col-12" id="sidebar"> 
+	<div class="container-fluid col-md-3 col-3" id="sidebar"> 
 		<div>
 			<img class="" id="logoSmall" src="../static/media/logo-sm.jpg" alt="FLACK- a cs50w project">
-			<h2 class="">{{ session.get("user").user }}</h2>
+			<h2 id="currentUser">{{ session.get("user").user }}</h2>
 			<form method="POST" action="/clear-name">
 				<button type="submit" class="icon"><i class="fas fa-user-edit"></i></button>
 			</form>
@@ -38,27 +38,27 @@
 			</div>
 		</div>
 	</div>
-	<div id="channel-content" class="container-fluid col-md-9 col-12">
+	<div id="channel-content" class="container-fluid col-md-9 col-9">
 		<div>
 			<h2 id="current-channel"></h2>
 			<span id="channel-details"></span>
 		</div>
 		<div id="messages">
 			<!--
-			 <div class="message-details">
-				<div class="display-name">FLACKBOT says:	
-					</div>
-				<span class="message-timestamp">Sun, 11 Aug 2019 20:36:30 GMT</span>
-			</div>
 			<div class="message-item">
+				<div class="message-details">
+					<div class="display-name">FLACKBOT says:	
+					</div>
+					<span class="message-timestamp">Sun, 11 Aug 2019 20:36:30 GMT</span>
+				</div>
 				<div class="message-text">
-					<i class="fas fa-quote-left"></i>Michelle-lele created "Just Another test CHannels, probably the millionth already!"!
+					<i class="fas fa-quote-left"></i>Lorem ipsum!
 					<i class="fas fa-quote-right"></i>
 				</div>
 
 			</div>-->
 		</div>
-		<div>
+		<div id="messageForm">
 			<form id="add-message" onsubmit="return false;">
 				<input id="new-message" type="text" required>
 				<button id="newMessageBtn" class="icon" type="submit"><i class="fas fa-paper-plane"></i></button>

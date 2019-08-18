@@ -16,9 +16,7 @@ app.config["SESSION_PERMANENT"] = True
 app.config["SESSION_TYPE"] = "filesystem"
 Session(app)
 
-SYSTEM_USER = "FlackBot"
-global systemUser
-systemUser = User(SYSTEM_USER)
+SYSTEM_USER = User("FlackBot")
 
 global channels
 channels = []
@@ -28,7 +26,8 @@ def display_name_required(f):
 	@wraps(f)
 	def decorated_function(*args, **kwargs):
 		if not session.get("user"):
-			return redirect(url_for("login")) 
+			return redirect(url_for("login"))
+		#TODO check if user exists 
 		return f(*args, **kwargs)
 	return decorated_function
 
@@ -80,8 +79,7 @@ def add_channel():
 	newChannel = Channel(channelName)
 	newChannel.created_by(session.get("user"))
 	newChannel.add_user(session.get("user"))
-	newChannel.add_message(f"{session.get('user').user} created \"{channelName}\"!", systemUser)
-	newChannel.add_message(f"{session.get('user').user} joined \"{channelName}\"!", systemUser)
+	newChannel.add_message(f"{session.get('user').user} created \"{channelName}\"!", SYSTEM_USER)
 	channels.append(newChannel.serialize())
 	return jsonify({'status': 200,'channels': channels,})
 
@@ -111,6 +109,7 @@ def add_message():
 	for channel in Channel._registry:
 		if channel.name == request.form.get("channel"):
 			aNewMessage = channel.add_message(messageText, messageUser)
+			#TODO also add user to channel if not there yet
 			print(f"aNewMessage: {aNewMessage.serialize()}", file=sys.stderr)
 			return jsonify({'status': 200,'message': aNewMessage.serialize()})
 
