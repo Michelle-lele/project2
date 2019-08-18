@@ -131,11 +131,13 @@ body .form-signin{
   font-size: 12pt;
   font-weight: bold;
   float: left;
+  margin-right: 10px;
 }
 
 .message-timestamp{
   float: right;
   font-size: 10pt;
+  margin: auto;
 }
 
 .right .message-timestamp, .right .display-name{

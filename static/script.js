@@ -128,6 +128,7 @@ document.addEventListener('DOMContentLoaded', () => {
 	function setMessageForm(currChannelName){
 		aMessageForm.style.display = 'block';
 		aMessageForm.setAttribute("data-channel", currChannelName);
+		inputNewMessage.focus();
 
 	};
 
@@ -179,8 +180,13 @@ document.addEventListener('DOMContentLoaded', () => {
 	});
 
 
-	//Add message div
+	//Add message
 	function addMessage(text, user, timestamp){
+
+		if (document.querySelectorAll("#messages .message-item").length >= 100){
+			messages_div.removeChild(document.querySelector('.message-item'));
+		}
+
 		//need to get rid of that :/
 		var div = document.createElement('div');
 		if (user == localStorage.getItem('currentUser')){

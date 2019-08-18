@@ -32,7 +32,8 @@ class Channel:
 		self.users.append(user.user) #TODO check if user exists, add method to User class?
 
 	def add_message(self, text, user):
-		#TODO satisfy the 100 messages requirement, so check how many currently, if 100 delete first and add last
+		if len(self.messages) >= 100:
+			self.messages.pop(0)
 		message = Message(text, user)
 		self.messages.append(message.serialize())
 		return message
@@ -45,7 +46,6 @@ class Channel:
 			'users': self.users,
 			'messages': self.messages
 			}
-	
 
 class Message:
 	def __init__(self, text, user):
