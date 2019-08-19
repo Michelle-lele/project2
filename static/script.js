@@ -1,13 +1,6 @@
 document.addEventListener('DOMContentLoaded', () => {
 	var socket = io.connect(location.protocol + '//' + document.domain + ':' + location.port);
 
-	//Add or update current user
-	var currentUser = document.getElementById('currentUser').innerHTML;
-	if (!localStorage.getItem('currentUser') || (localStorage.getItem('currentUser') != currentUser)){
-		localStorage.setItem('currentUser', currentUser);
-	}
-
-	//Add new channel and emit event to all other users
 	var newChannelBtn = document.getElementById('newChannelBtn');
 	var form = document.getElementById('channelForm');
 	var info_message =document.querySelector("#infoMessage");
@@ -16,7 +9,25 @@ document.addEventListener('DOMContentLoaded', () => {
 	var messages_div = document.querySelector("#messages");
 	var aMessageForm = document.getElementById('add-message');
 	var newMessageBtn = document.getElementById('newMessageBtn');
+	var systemMessage = document.getElementById('systemMessage');
 
+	//Show current channel
+	if (!localStorage.getItem('currentChannel')){
+		systemMessage.style.color ='#4E95D7';
+		systemMessage.innerHTML = "Hello there! Start flacking!";
+	}
+	else{
+		
+		getChannel(localStorage.getItem('currentChannel'));
+	}
+
+	//Add or update current user
+	var currentUser = document.getElementById('currentUser').innerHTML;
+	if (!localStorage.getItem('currentUser') || (localStorage.getItem('currentUser') != currentUser)){
+		localStorage.setItem('currentUser', currentUser);
+	}
+
+	//Add new channel and emit event to all other users
   	newChannelBtn.addEventListener('click', () => {
 	form.style.display = 'block';
 	newChannelname.focus();
@@ -37,6 +48,9 @@ document.addEventListener('DOMContentLoaded', () => {
 		    		addChannelToTable(newChannel);
 
 					form.style.display = 'none';
+
+					getChannel(newChannel);
+
 					socket.emit('submit channel', {'aNewChannel': newChannel});
 			    	}
 			    else {
@@ -68,7 +82,6 @@ document.addEventListener('DOMContentLoaded', () => {
 		var tr = myTable.insertRow(0);
 		var td = tr.insertCell(0);
 		td.appendChild(a);
-		getChannel(aNewChannel);
 
 		a.addEventListener('click', () =>{
 			getChannel(aNewChannel);
@@ -86,6 +99,7 @@ document.addEventListener('DOMContentLoaded', () => {
 	//get all data for specific channel
 	function getChannel(channelName){
 		messages_div.innerHTML = "";
+		systemMessage.innerHTML = "";
 		const request = new XMLHttpRequest();
 
 		request.open('POST', '/get-channel');
@@ -109,11 +123,10 @@ document.addEventListener('DOMContentLoaded', () => {
 			    	}
 
 			    	setMessageForm(data.channel.name);
+			    	localStorage.setItem('currentChannel', channelName);
 			    }
 			    else {
-			    	//show some error message
-			    	//TO DO build message div & append message content
-			    	console.log("Something went wrong! Channel cannot be loaded :(");
+			    	systemMessage.innerHTML = "Something went wrong! Channel cannot be loaded :(";
 			    }
 		    }
 
