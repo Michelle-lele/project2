@@ -10,6 +10,12 @@ document.addEventListener('DOMContentLoaded', () => {
 	var aMessageForm = document.getElementById('add-message');
 	var newMessageBtn = document.getElementById('newMessageBtn');
 	var systemMessage = document.getElementById('systemMessage');
+	var clearBtn = document.getElementById('clear-name');
+
+	clearBtn.addEventListener("click", () =>{
+		localStorage.setItem('currentChannel', "");
+	});
+
 
 	//Show current channel
 	if (!localStorage.getItem('currentChannel')){
@@ -17,7 +23,6 @@ document.addEventListener('DOMContentLoaded', () => {
 		systemMessage.innerHTML = "Hello there! Start flacking!";
 	}
 	else{
-		
 		getChannel(localStorage.getItem('currentChannel'));
 	}
 

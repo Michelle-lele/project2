@@ -12,7 +12,7 @@
 		<div>
 			<img class="" id="logoSmall" src="../static/media/logo-sm.jpg" alt="FLACK- a cs50w project">
 			<h2 id="currentUser">{{ session.get("user").user }}</h2>
-			<form method="POST" action="/clear-name">
+			<form id="clear-name" method="POST" action="/clear-name">
 				<button type="submit" class="icon"><i class="fas fa-user-edit"></i></button>
 			</form>
 		</div>

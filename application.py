@@ -27,7 +27,8 @@ def display_name_required(f):
 	def decorated_function(*args, **kwargs):
 		if not session.get("user"):
 			return redirect(url_for("login"))
-		#TODO check if user exists 
+			if session.get("user") not in User._registry:
+				return redirect(url_for("clear_name"))
 		return f(*args, **kwargs)
 	return decorated_function
 
@@ -74,7 +75,7 @@ def add_channel():
 		if channelName == channel['name']:
 			error = f"Channel with name \'{channelName}\' already exists!"
 			return jsonify ({'status': 400,'error': error,})
-
+ 
 	#create channel
 	newChannel = Channel(channelName)
 	newChannel.created_by(session.get("user"))
