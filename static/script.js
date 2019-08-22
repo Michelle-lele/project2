@@ -234,12 +234,13 @@ document.addEventListener('DOMContentLoaded', () => {
 		divMessage.innerHTML = `${text}`;
 		div.appendChild(divMessage);
 
-		var leftQuote = document.createElement('i');
+		/*var leftQuote = document.createElement('i');
 		leftQuote.setAttribute("class", "fas fa-quote-left");
 		divMessage.insertBefore(leftQuote, divMessage.firstChild);
 
 		var rightQuote = document.createElement('i');
 		rightQuote.setAttribute("class", "fas fa-quote-right");
 		divMessage.appendChild(rightQuote);	
+		*/
 	};
 });

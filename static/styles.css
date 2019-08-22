@@ -49,12 +49,44 @@ body .form-signin{
   margin-bottom: 20px;
 }
 
+
+#currentUser{
+  float: left;
+}
+
+#clear-name{
+  float: right;
+  clear: right;
+}
+
+
 #channels{
-  ;
+  clear: both;
+}
+
+#channels h3{
+  float: left;
+}
+
+#newChannelBtn{
+  float: right;
+}
+
+#current-channel{
+  float: left;
+}
+
+#channelsList{
+  clear: both;
 }
 
 #channel-content{
   position: relative;
+  clear: both;
+}
+
+#channel-details{
+  float: right;
 }
 
 #messages{
@@ -62,9 +94,11 @@ body .form-signin{
   position: ablsolute;
   bottom: 0;
   right: 0;
+  clear: both;
   overflow: scroll;
   overflow-y: auto;
   overflow-x: hidden;
+
 }
 
 #message-form{
@@ -284,7 +318,7 @@ body .form-signin{
 }
 
 /* not working */
-.table-hover, .table-hover td{
+.table, .table td{
   border-bottom: 0px solid #dee2e6 !important
   border-top: 0px solid #4E95D7 !important
 }
