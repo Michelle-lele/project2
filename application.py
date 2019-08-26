@@ -27,8 +27,8 @@ def display_name_required(f):
 	def decorated_function(*args, **kwargs):
 		if not session.get("user"):
 			return redirect(url_for("login"))
-			if session.get("user") not in User._registry:
-				return redirect(url_for("clear_name"))
+		if session.get("user").user not in User._registry:
+			return redirect(url_for("clear_name"))
 		return f(*args, **kwargs)
 	return decorated_function
 
@@ -67,8 +67,16 @@ def clear_name():
 @app.route('/add-channel', methods=['POST'])
 def add_channel():
 	error = ""
-	#TODO form error handling- empty value, lenght up to 60characters??, escape special characters
+	#TODO escape special characters
 	channelName = request.form.get("name")
+
+	if not channelName:
+		error = "Channel name is missing!"
+		return jsonify ({'status': 400,'error': error,})
+
+	if len(channelName) > 60:
+		error = "Channel name should be up to 60 characters!"
+		return jsonify ({'status': 400,'error': error,})
 
 	#ensure channel name doesn't exist
 	for channel in channels:

@@ -20,7 +20,7 @@ class Channel:
 
 	def __init__(self, name):
 		self.name = name
-		self.users = []
+		self.users = set()
 		self.messages = []
 		self.created = datetime.datetime.now();
 		self._registry.append(self)
@@ -29,13 +29,14 @@ class Channel:
 		self.created_by = user.user
 
 	def add_user(self, user):
-		self.users.append(user.user) #TODO check if user exists, add method to User class?
+		self.users.add(user.user) #TODO check if user exists, add method to User class?
 
 	def add_message(self, text, user):
 		if len(self.messages) >= 100:
 			self.messages.pop(0)
 		message = Message(text, user)
 		self.messages.append(message.serialize())
+		self.add_user(user)
 		return message
 
 	def serialize(self):
@@ -43,7 +44,7 @@ class Channel:
 			'name': self.name,
 			'created': self.created,
 			'created_by': self.created_by,
-			'users': self.users,
+			'users': list(self.users),
 			'messages': self.messages
 			}
 
