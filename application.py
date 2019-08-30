@@ -118,14 +118,12 @@ def add_message():
 	for channel in Channel._registry:
 		if channel.name == request.form.get("channel"):
 			aNewMessage = channel.add_message(messageText, messageUser)
-			#TODO also add user to channel if not there yet
-			print(f"aNewMessage: {aNewMessage.serialize()}", file=sys.stderr)
-			return jsonify({'status': 200,'message': aNewMessage.serialize()})
+			return jsonify({'status': 200,  'channel': channel.name, 'message': aNewMessage.serialize()})
 
 	return jsonify({'status': 404, 'error': "Channel doesn't exist!"})
 
 @socketio.on("submit message")
 def submit_message(data):
 	data = data["data"]
-	print(data["message"]["text"], file = sys.stderr)
+	print(data, file=sys.stderr)
 	emit("announce new message", data, broadcast=True)

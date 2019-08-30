@@ -210,6 +210,19 @@ body .form-signin{
   float: left;
 }
 
+.newMessagesCounter {
+  border: 1px solid #E5D80E;
+  border-radius: 90px 90px 90px 90px;
+  background-color: #E5D80E;
+  text-align: center;
+  margin: auto;
+  color: white;
+  width: 25px;
+  height: 25px;
+  float: right;
+  display: none;
+}
+
 .message-text .fa-quote-left{
   margin-right: 5px;
   font-size: 15px;

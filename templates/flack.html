@@ -30,8 +30,12 @@
 				  </thead>
 				  <tbody>
 				  	{% for channel in channels|sort(attribute='name') %}
-				  	<tr><td><a class="channel-item" title="Click to show messages" data-channel="{{ channel['name'] }}"
- href="#">{{ channel['name'] }}</a></td></tr>
+				  	<tr><td data-channel="{{ channel['name'] }}">
+				  		<a class="channel-item" title="Click to show messages" data-channel="{{ channel['name'] }}"
+ href="#">{{ channel['name'] }}</a>
+						<div class="newMessagesCounter">
+						</div>
+					</td></tr>
 				  	{% endfor %}
 				  </tbody>
 				</table>

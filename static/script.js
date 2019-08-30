@@ -84,9 +84,15 @@ document.addEventListener('DOMContentLoaded', () => {
 		a.setAttribute("href","#");
 		a.setAttribute("data-channel",aNewChannel);
 		a.innerHTML = aNewChannel;
+
+		var divCounter = document.createElement('div');
+		divCounter.setAttribute("class", "newMessagesCounter");
+		divCounter.innerHTML = 42;
+
 		var tr = myTable.insertRow(0);
 		var td = tr.insertCell(0);
 		td.appendChild(a);
+		td.appendChild(divCounter);
 
 		a.addEventListener('click', () =>{
 			getChannel(aNewChannel);
@@ -174,13 +180,14 @@ document.addEventListener('DOMContentLoaded', () => {
 
 		request.onload = () =>{
 			const data = JSON.parse(request.responseText);
+			console.log(`${request.responseText}`);
 
 			if (request.status == 200 && data.status == 200) {
 				//TO DO something here
-				socket.emit('submit message', {'data': data.message});
+				socket.emit('submit message', {'data': data});
 				    }
 			else {
-				    //TO FO else here
+				    //TODO else here
 				}
 		}
 
@@ -194,10 +201,12 @@ document.addEventListener('DOMContentLoaded', () => {
 	});
 
 	socket.on('announce new message', data =>{
-		addMessage(data.message.text, data.message.user,data.message.timestamp);
+		addMessage(data.message.message.text, data.message.message.user,data.message.message.timestamp);
+		countNewMessage	(data.message.message.user, data.channel);
 	});
 
 
+	//TODO FIX adding emitted messages to the current user chat instead of the one message was submitted
 	//Add message
 	function addMessage(text, user, timestamp){
 
@@ -205,9 +214,10 @@ document.addEventListener('DOMContentLoaded', () => {
 			messages_div.removeChild(document.querySelector('.message-item'));
 		}
 
+
 		//need to get rid of that :/
 		var div = document.createElement('div');
-		if (user == localStorage.getItem('currentUser')){
+		if (byCurrentUser(user) == true){
 			div.setAttribute("class", "message-item right");
 		}
 		else{
@@ -242,5 +252,39 @@ document.addEventListener('DOMContentLoaded', () => {
 		rightQuote.setAttribute("class", "fas fa-quote-right");
 		divMessage.appendChild(rightQuote);	
 		*/
+	};
+
+	var newMessages = [];
+	//console.log(newMessages);
+	function countNewMessage(user, channel){
+		if (byCurrentUser(user) == false){
+			if (newMessages.length != 0){
+				for (var i = 0; i < newMessages.length; i++){
+						if (channel == newMessages[i].channel){
+							newMessages[i].newMessages += 1;
+							console.log(newMessages);
+							//TODO update the counter value in UI
+							return true;
+						}
+					}
+			}
+			var newCounter = {"channel": `${channel}`, "newMessages": 1};
+			newMessages.push(newCounter);
+			//TODO show the counter in UI
+			var counter = document.querySelector("td[data-channel= "+ CSS.escape(channel) +"] > div");
+			counter.innerHTML = newCounter.newMessages;
+			counter.style.display = "block";
+			console.log(newMessages);
+			return true;
+		};
+	};
+
+	function byCurrentUser(user){
+		if (user == localStorage.getItem('currentUser')){
+			return true;
+		}
+		else{
+			return false;
+		}
 	};
 });
