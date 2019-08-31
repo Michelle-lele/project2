@@ -32,6 +32,13 @@ document.addEventListener('DOMContentLoaded', () => {
 		localStorage.setItem('currentUser', currentUser);
 	}
 
+	//Load unread messages counter
+	var channels = document.querySelectorAll("td[data-channel]");
+	console.log(`${channels["data-channel"]}`);
+	channelsZ = Array.prototype.map.call(channels, function(element){
+		console.log(`${element.value}`);
+	});
+
 	//Add new channel and emit event to all other users
   	newChannelBtn.addEventListener('click', () => {
 	form.style.display = 'block';
@@ -91,6 +98,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
 		var tr = myTable.insertRow(0);
 		var td = tr.insertCell(0);
+		td.setAttribute("data-channel", aNewChannel);
 		td.appendChild(a);
 		td.appendChild(divCounter);
 
@@ -102,7 +110,7 @@ document.addEventListener('DOMContentLoaded', () => {
 	//load channel content
 	document.querySelectorAll(".channel-item").forEach(link =>{
 		link.onclick = () =>{
-			channelName = link.dataset.channel; //or use innerHTML
+			channelName = link.dataset.channel;
 			getChannel(channelName);
 		};
 	});
@@ -180,10 +188,8 @@ document.addEventListener('DOMContentLoaded', () => {
 
 		request.onload = () =>{
 			const data = JSON.parse(request.responseText);
-			console.log(`${request.responseText}`);
 
 			if (request.status == 200 && data.status == 200) {
-				//TO DO something here
 				socket.emit('submit message', {'data': data});
 				    }
 			else {
@@ -255,15 +261,14 @@ document.addEventListener('DOMContentLoaded', () => {
 	};
 
 	var newMessages = [];
-	//console.log(newMessages);
 	function countNewMessage(user, channel){
+		var counter = document.querySelector("td[data-channel= "+ CSS.escape(channel) +"] > div");
 		if (byCurrentUser(user) == false){
 			if (newMessages.length != 0){
 				for (var i = 0; i < newMessages.length; i++){
 						if (channel == newMessages[i].channel){
 							newMessages[i].newMessages += 1;
-							console.log(newMessages);
-							//TODO update the counter value in UI
+							counter.innerHTML =newMessages[i].newMessages;
 							return true;
 						}
 					}
@@ -271,10 +276,9 @@ document.addEventListener('DOMContentLoaded', () => {
 			var newCounter = {"channel": `${channel}`, "newMessages": 1};
 			newMessages.push(newCounter);
 			//TODO show the counter in UI
-			var counter = document.querySelector("td[data-channel= "+ CSS.escape(channel) +"] > div");
+			
 			counter.innerHTML = newCounter.newMessages;
 			counter.style.display = "block";
-			console.log(newMessages);
 			return true;
 		};
 	};
