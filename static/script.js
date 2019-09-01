@@ -12,6 +12,8 @@ document.addEventListener('DOMContentLoaded', () => {
 	var systemMessage = document.getElementById('systemMessage');
 	var clearBtn = document.getElementById('clear-name');
 
+	var newMessages = [];
+
 	clearBtn.addEventListener("click", () =>{
 		localStorage.setItem('currentChannel', "");
 	});
@@ -34,7 +36,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
 	//Load unread messages counter
 	var channels = document.querySelectorAll("td[data-channel]");
-	console.log(`${channels["data-channel"]}`);
+
 	channelsZ = Array.prototype.map.call(channels, function(element){
 		console.log(`${element.value}`);
 	});
@@ -94,7 +96,6 @@ document.addEventListener('DOMContentLoaded', () => {
 
 		var divCounter = document.createElement('div');
 		divCounter.setAttribute("class", "newMessagesCounter");
-		divCounter.innerHTML = 42;
 
 		var tr = myTable.insertRow(0);
 		var td = tr.insertCell(0);
@@ -103,7 +104,7 @@ document.addEventListener('DOMContentLoaded', () => {
 		td.appendChild(divCounter);
 
 		a.addEventListener('click', () =>{
-			getChannel(aNewChannel);
+			getChannel(aNewChannel);clearUnreadCounter(aNewChannel);
 		});
 	};
 
@@ -112,6 +113,8 @@ document.addEventListener('DOMContentLoaded', () => {
 		link.onclick = () =>{
 			channelName = link.dataset.channel;
 			getChannel(channelName);
+			clearUnreadCounter(channelName);
+			console.log("Should have finished executing clearUnreadCounter");
 		};
 	});
 
@@ -119,6 +122,7 @@ document.addEventListener('DOMContentLoaded', () => {
 	function getChannel(channelName){
 		messages_div.innerHTML = "";
 		systemMessage.innerHTML = "";
+		
 		const request = new XMLHttpRequest();
 
 		request.open('POST', '/get-channel');
@@ -207,21 +211,23 @@ document.addEventListener('DOMContentLoaded', () => {
 	});
 
 	socket.on('announce new message', data =>{
-		addMessage(data.message.message.text, data.message.message.user,data.message.message.timestamp);
-		countNewMessage	(data.message.message.user, data.channel);
+		if (localStorage.getItem('currentChannel') == data.channel){
+			addMessage(data.message.message.text, data.message.message.user,data.message.message.timestamp);
+			countNewMessage(data.message.message.user, data.channel);
+		}
 	});
 
 
 	//TODO FIX adding emitted messages to the current user chat instead of the one message was submitted
 	//Add message
 	function addMessage(text, user, timestamp){
-
+		//limit messages to 100
 		if (document.querySelectorAll("#messages .message-item").length >= 100){
 			messages_div.removeChild(document.querySelector('.message-item'));
 		}
 
 
-		//need to get rid of that :/
+		//TODO need to get rid of that :/
 		var div = document.createElement('div');
 		if (byCurrentUser(user) == true){
 			div.setAttribute("class", "message-item right");
@@ -260,13 +266,12 @@ document.addEventListener('DOMContentLoaded', () => {
 		*/
 	};
 
-	var newMessages = [];
 	function countNewMessage(user, channel){
 		var counter = document.querySelector("td[data-channel= "+ CSS.escape(channel) +"] > div");
 		if (byCurrentUser(user) == false){
 			if (newMessages.length != 0){
 				for (var i = 0; i < newMessages.length; i++){
-						if (channel == newMessages[i].channel){
+						if (newMessages[i] != undefined && channel == newMessages[i].channel){
 							newMessages[i].newMessages += 1;
 							counter.innerHTML =newMessages[i].newMessages;
 							return true;
@@ -281,6 +286,17 @@ document.addEventListener('DOMContentLoaded', () => {
 			counter.style.display = "block";
 			return true;
 		};
+	};
+
+	function clearUnreadCounter(channel){
+		console.log("In clearUnreadCounter");
+		for (var i = 0; i < newMessages.length; i++){
+			if (newMessages[i] != undefined && channel == newMessages[i].channel){
+				console.log("About to delete the counter!");
+				delete newMessages[i];
+				document.querySelector("td[data-channel= "+ CSS.escape(channel) +"] > div").style.display = "none";
+			}
+		}
 	};
 
 	function byCurrentUser(user){

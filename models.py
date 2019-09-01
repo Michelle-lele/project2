@@ -29,7 +29,8 @@ class Channel:
 		self.created_by = user.user
 
 	def add_user(self, user):
-		self.users.add(user.user) #TODO check if user exists, add method to User class?
+		self.users.add(user.user)
+		#TODO check if user exists, add method to User class?
 
 	def add_message(self, text, user):
 		if len(self.messages) >= 100:

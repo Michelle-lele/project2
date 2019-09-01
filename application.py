@@ -101,9 +101,9 @@ def submit_channel(data):
 
 @app.route('/get-channel', methods=['POST'])
 def get_channel():
-	for channel in channels:
-		if request.form.get("channelName") == channel['name']:
-			return jsonify({'status':200, 'channel': channel})
+	for channel in Channel._registry:
+		if request.form.get("channelName") == channel.name:
+			return jsonify({'status':200, 'channel': channel.serialize()})
 	
 	return jsonify({'status': 404, 'error': "Channel doesn't exist!"})
 
@@ -125,5 +125,4 @@ def add_message():
 @socketio.on("submit message")
 def submit_message(data):
 	data = data["data"]
-	print(data, file=sys.stderr)
 	emit("announce new message", data, broadcast=True)
