@@ -12,7 +12,22 @@ document.addEventListener('DOMContentLoaded', () => {
 	var systemMessage = document.getElementById('systemMessage');
 	var clearBtn = document.getElementById('clear-name');
 
-	var newMessages = [];
+	//Load unread messages counter
+	if (JSON.parse(localStorage.getItem("newMessages")) == "" || !localStorage.getItem("newMessages")){
+		var newMessages = [];
+		localStorage.setItem("newMessages", JSON.stringify(newMessages));
+		console.log(`${JSON.parse(localStorage.getItem("newMessages"))}`);
+	}
+	else{
+		var newMessages = JSON.parse(localStorage.getItem("newMessages"));
+		for (var i = 0; i < newMessages.length; i++){
+			if (newMessages[i] != null){
+				var aCounter = document.querySelector("td[data-channel= "+ CSS.escape(newMessages[i].channel) +"] > div");
+				aCounter.innerHTML = newMessages[i].newMessages;
+				aCounter.style.display = "block";
+			}
+		}
+	}
 
 	clearBtn.addEventListener("click", () =>{
 		localStorage.setItem('currentChannel', "");
@@ -34,12 +49,6 @@ document.addEventListener('DOMContentLoaded', () => {
 		localStorage.setItem('currentUser', currentUser);
 	}
 
-	//Load unread messages counter
-	var channels = document.querySelectorAll("td[data-channel]");
-
-	channelsZ = Array.prototype.map.call(channels, function(element){
-		console.log(`${element.value}`);
-	});
 
 	//Add new channel and emit event to all other users
   	newChannelBtn.addEventListener('click', () => {
@@ -114,7 +123,6 @@ document.addEventListener('DOMContentLoaded', () => {
 			channelName = link.dataset.channel;
 			getChannel(channelName);
 			clearUnreadCounter(channelName);
-			console.log("Should have finished executing clearUnreadCounter");
 		};
 	});
 
@@ -213,12 +221,12 @@ document.addEventListener('DOMContentLoaded', () => {
 	socket.on('announce new message', data =>{
 		if (localStorage.getItem('currentChannel') == data.channel){
 			addMessage(data.message.message.text, data.message.message.user,data.message.message.timestamp);
+		}
+		else{
 			countNewMessage(data.message.message.user, data.channel);
 		}
 	});
 
-
-	//TODO FIX adding emitted messages to the current user chat instead of the one message was submitted
 	//Add message
 	function addMessage(text, user, timestamp){
 		//limit messages to 100
@@ -273,6 +281,7 @@ document.addEventListener('DOMContentLoaded', () => {
 				for (var i = 0; i < newMessages.length; i++){
 						if (newMessages[i] != undefined && channel == newMessages[i].channel){
 							newMessages[i].newMessages += 1;
+							localStorage.setItem("newMessages", JSON.stringify(newMessages));
 							counter.innerHTML =newMessages[i].newMessages;
 							return true;
 						}
@@ -280,7 +289,7 @@ document.addEventListener('DOMContentLoaded', () => {
 			}
 			var newCounter = {"channel": `${channel}`, "newMessages": 1};
 			newMessages.push(newCounter);
-			//TODO show the counter in UI
+			localStorage.setItem("newMessages", JSON.stringify(newMessages));
 			
 			counter.innerHTML = newCounter.newMessages;
 			counter.style.display = "block";
@@ -289,11 +298,10 @@ document.addEventListener('DOMContentLoaded', () => {
 	};
 
 	function clearUnreadCounter(channel){
-		console.log("In clearUnreadCounter");
 		for (var i = 0; i < newMessages.length; i++){
 			if (newMessages[i] != undefined && channel == newMessages[i].channel){
-				console.log("About to delete the counter!");
 				delete newMessages[i];
+				localStorage.setItem("newMessages", JSON.stringify(newMessages));
 				document.querySelector("td[data-channel= "+ CSS.escape(channel) +"] > div").style.display = "none";
 			}
 		}

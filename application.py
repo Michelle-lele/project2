@@ -65,6 +65,7 @@ def clear_name():
 
 
 @app.route('/add-channel', methods=['POST'])
+@display_name_required
 def add_channel():
 	error = ""
 	#TODO escape special characters
@@ -100,6 +101,7 @@ def submit_channel(data):
 
 
 @app.route('/get-channel', methods=['POST'])
+@display_name_required
 def get_channel():
 	for channel in Channel._registry:
 		if request.form.get("channelName") == channel.name:
@@ -108,6 +110,7 @@ def get_channel():
 	return jsonify({'status': 404, 'error': "Channel doesn't exist!"})
 
 @app.route('/add-message', methods=['POST'])
+@display_name_required
 def add_message():
 	if request.form.get("text") == "":
 		return jsonify({'status': 404, 'error': "Message cannot be blank!"})
