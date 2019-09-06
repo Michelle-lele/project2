@@ -6,17 +6,16 @@ document.addEventListener('DOMContentLoaded', () => {
 	var info_message =document.querySelector("#infoMessage");
 	var newChannelname = document.getElementById('channelName');
 	var myTable = document.querySelector('#channelsTable');
-	var messages_div = document.querySelector("#messages");
+	var divMessages = document.querySelector("#messages");
 	var aMessageForm = document.getElementById('add-message');
 	var newMessageBtn = document.getElementById('newMessageBtn');
 	var systemMessage = document.getElementById('systemMessage');
 	var clearBtn = document.getElementById('clear-name');
 
 	//Load unread messages counter
-	if (JSON.parse(localStorage.getItem("newMessages")) == "" || !localStorage.getItem("newMessages")){
+	if (JSON.parse(localStorage.getItem("newMessages")) == "" || !localStorage.getItem("newMessages") || localStorage.getItem("newMessages") == null){
 		var newMessages = [];
 		localStorage.setItem("newMessages", JSON.stringify(newMessages));
-		console.log(`${JSON.parse(localStorage.getItem("newMessages"))}`);
 	}
 	else{
 		var newMessages = JSON.parse(localStorage.getItem("newMessages"));
@@ -128,7 +127,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
 	//get all data for specific channel
 	function getChannel(channelName){
-		messages_div.innerHTML = "";
+		divMessages.innerHTML = "";
 		systemMessage.innerHTML = "";
 		
 		const request = new XMLHttpRequest();
@@ -155,6 +154,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
 			    	setMessageForm(data.channel.name);
 			    	localStorage.setItem('currentChannel', channelName);
+			    	divMessages.scrollTop = divMessages.scrollHeight;
 			    }
 			    else {
 			    	systemMessage.innerHTML = "Something went wrong! Channel cannot be loaded :(";
@@ -231,7 +231,7 @@ document.addEventListener('DOMContentLoaded', () => {
 	function addMessage(text, user, timestamp){
 		//limit messages to 100
 		if (document.querySelectorAll("#messages .message-item").length >= 100){
-			messages_div.removeChild(document.querySelector('.message-item'));
+			divMessages.removeChild(document.querySelector('.message-item'));
 		}
 
 
@@ -243,7 +243,7 @@ document.addEventListener('DOMContentLoaded', () => {
 		else{
 			div.setAttribute("class", "message-item left");
 		}
-		messages_div.appendChild(div);
+		divMessages.appendChild(div);
 
 		var divMessageDetails = document.createElement('div');
 		divMessageDetails.setAttribute("class", "message-details");
@@ -263,6 +263,8 @@ document.addEventListener('DOMContentLoaded', () => {
 		divMessage.setAttribute("class", "message-text");
 		divMessage.innerHTML = `${text}`;
 		div.appendChild(divMessage);
+
+		divMessages.scrollTop = divMessages.scrollHeight;
 
 		/*var leftQuote = document.createElement('i');
 		leftQuote.setAttribute("class", "fas fa-quote-left");
